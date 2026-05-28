@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/c/Users/Akira/Desktop/Global Solution - Space Waste/**)",
+      "Bash(java -cp out br.com.spacewaste.Main)"
+    ]
+  }
+}
