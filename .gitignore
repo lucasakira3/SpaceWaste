@@ -1,0 +1,14 @@
+# Compilados Java
+java/out/
+
+# Configurações locais do Claude Code
+.claude/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
