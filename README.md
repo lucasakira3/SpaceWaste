@@ -177,7 +177,7 @@ para otimizar a sequência de coleta e minimizar o delta-V total da missão:
 ## 📦 Entregas do Projeto
 
 - [x] Sistema Java com POO (console)
-- [ ] Diagrama de Classes UML
+- [x] Diagrama de Classes UML (`uml/SpaceWaste_ClassDiagram.puml`)
 - [ ] Banco de Dados (script SQL + Diagrama ER)
 - [ ] Protótipo Web (HTML + CSS + JS)
 - [ ] Vídeo Pitch (3 minutos)
