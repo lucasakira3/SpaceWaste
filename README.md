@@ -1,183 +1,132 @@
-# 🚀 Space Waste — Sistema de Gestão de Detritos Orbitais
+# 🚀 Space Waste — Sistema de Gestão e Otimização de Detritos Orbitais
 
-> Plataforma de gerenciamento de lixo espacial com frota de **Space Trucks** orbitais,
-> cálculo de rotas otimizadas e controle de missões de coleta ao redor da Terra.
+> Plataforma integrada de gerenciamento de lixo espacial com frota de **Space Trucks** orbitais, cálculo matemático de rotas de menor delta-V, simulação física de estabilidade de carga e interface com HUD temático e globo terrestre 3D.
 
 ---
 
 ## 📡 Sobre o Projeto
 
-O **Space Waste** é uma solução para um dos maiores desafios da economia espacial moderna:
-o acúmulo de detritos em órbita terrestre. Atualmente existem mais de **27.000 fragmentos
-rastreados** em órbita — e milhões de pequenos detritos não rastreados que ameaçam
-satélites ativos, estações espaciais e futuras missões.
+O **Space Waste** é uma solução de ponta para combater o acúmulo perigoso de detritos ao redor da Terra. Atualmente, existem mais de **27.000 fragmentos de grande porte rastreados** e milhões de pequenas partículas não catalogadas em órbita baixa (LEO). Viajando a mais de 28.000 km/h, esses objetos ameaçam satélites de comunicação ativos, telescópios e habitações humanas espaciais (como a Estação Espacial Internacional - ISS).
 
-A solução proposta consiste em uma frota de **Space Trucks** — caminhões de lixo orbitais —
-que percorrem rotas otimizadas ao redor da Terra, coletam detritos e os transportam até
-estações base para reaproveitamento de materiais ou carbonização controlada.
+A solução consiste em coordenar uma frota de **Space Trucks** (caminhões de coleta espacial) que percorrem rotas calculadas via algoritmos inteligentes, recolhem os fragmentos orbitais e os transportam para estações de descarte seguro:
+1. **Reaproveitamento/Reciclagem**: Realizado na Estação Orbital LEO para reaproveitar ligas metálicas leves.
+2. **Carbonização Controlada**: Reentrada atmosférica guiada sobre áreas seguras da Terra (incineração por atrito).
 
 ---
 
-## ✨ Funcionalidades
+## 🧱 Arquitetura e Estrutura do Sistema
 
-| Módulo | Operações |
-|---|---|
-| **Detritos Espaciais** | Cadastro, listagem, busca por ID/status/tipo, atualização, remoção |
-| **Space Trucks** | Cadastro, controle de carga/combustível, gestão de tripulantes |
-| **Estações Base** | Cadastro de bases orbitais e terrestres, controle de armazenamento |
-| **Missões Orbitais** | Planejamento, adição de detritos, rota otimizada, iniciar/concluir/cancelar |
-| **Relatórios** | Resumo geral, estatísticas por status/tipo, listagem polimórfica |
+O projeto é dividido em duas frentes complementares: um motor lógico robusto desenvolvido sob conceitos rígidos de **Programação Orientada a Objetos (POO) em Java** e uma **interface web responsiva de alta fidelidade desenvolvida em React**.
 
----
-
-## 🧱 Arquitetura e Conceitos de POO
-
-O projeto aplica os **4 pilares da Programação Orientada a Objetos** de forma explícita:
-
-### Abstração
 ```
-ObjetoEspacial (abstract)   →  define contrato para todos os objetos do sistema
-Coletavel      (interface)  →  contrato de coleta: podeSerColetado(), marcarComoColetado()
-```
-
-### Herança
-```
-ObjetoEspacial
-├── Detrito       (extends ObjetoEspacial, implements Coletavel)
-├── SpaceTruck    (extends ObjetoEspacial)
-└── EstacaoBase   (extends ObjetoEspacial)
-```
-
-### Encapsulamento
-```
-Todos os atributos são private
-Acesso controlado via getters e setters públicos
-```
-
-### Polimorfismo
-```java
-// MenuRelatorio.java — chamada polimórfica exibir()
-List<ObjetoEspacial> objetos = new ArrayList<>();
-objetos.addAll(detritoService.listarTodos());
-objetos.addAll(spaceTruckService.listarTodos());
-objetos.addAll(estacaoService.listarTodas());
-
-for (ObjetoEspacial obj : objetos) {
-    obj.exibir(); // comportamento diferente para cada tipo
-}
+spacewaste/
+│
+├── java/                      # Sistema CLI Java (Motor Lógico)
+│   ├── src/br/com/spacewaste/
+│   │   ├── enums/             # Definição de estados e enuns do domínio
+│   │   ├── model/             # Entidades abstratas, interfaces e modelos
+│   │   ├── service/           # CRUDs e algoritmos orbitais
+│   │   ├── menu/              # Interface de linha de comando CLI
+│   │   └── Main.java          # Entrada e injeção de dependências do console
+│
+├── web/                       # Interface Front-End (React + Vite)
+│   ├── src/
+│   │   ├── components/        # Componentes reutilizáveis (Map, Dashboard, etc.)
+│   │   ├── services/          # Mock de dados NASA/ESA e algoritmos JS
+│   │   ├── App.jsx            # Roteador simples e gerenciamento de estado
+│   │   ├── index.css          # Design System HUD Espacial e Dark Mode
+│   │   └── App.css            # Estilos, animações e retículos HUD específicos
+│   ├── index.html             # Estrutura base HTML5 com tags SEO
+│   └── package.json           # Dependências React e Vite
+│
+└── README.md                  # Este arquivo explicativo do repositório
 ```
 
 ---
 
-## 📁 Estrutura do Projeto
+## ⚙️ Motor Lógico em Java (Console CLI)
 
-```
-java/src/br/com/spacewaste/
-│
-├── enums/
-│   ├── TipoDetrito.java        # 7 tipos de detrito espacial
-│   ├── StatusDetrito.java      # Flutuando → Carbonizado
-│   ├── TipoDescarte.java       # Reaproveitamento / Carbonização
-│   ├── StatusNave.java         # Disponivel / Em Missão / Manutenção
-│   └── StatusMissao.java       # Planejada / Em Andamento / Concluída
-│
-├── model/
-│   ├── ObjetoEspacial.java     # Classe ABSTRATA base
-│   ├── Coletavel.java          # INTERFACE de coleta
-│   ├── Detrito.java            # Detrito orbital (herança + interface)
-│   ├── SpaceTruck.java         # Caminhão de lixo orbital (herança)
-│   ├── EstacaoBase.java        # Base de recebimento (herança)
-│   ├── Missao.java             # Missão de coleta orbital
-│   ├── PontoOrbital.java       # Waypoint de rota
-│   └── Tripulante.java         # Membro da tripulação
-│
-├── service/
-│   ├── DetritoService.java     # CRUD + filtros de detritos
-│   ├── SpaceTruckService.java  # CRUD + gestão de tripulantes
-│   ├── EstacaoService.java     # CRUD de estações base
-│   ├── MissaoService.java      # Ciclo de vida completo de missões
-│   └── RotaService.java        # Algoritmo Nearest Neighbor orbital
-│
-├── menu/
-│   ├── MenuPrincipal.java      # Navegação central
-│   ├── MenuDetrito.java        # Menu completo de detritos
-│   ├── MenuSpaceTruck.java     # Menu completo de Space Trucks
-│   ├── MenuEstacao.java        # Menu de estações base
-│   ├── MenuMissao.java         # Menu de missões orbitais
-│   └── MenuRelatorio.java      # Relatórios e estatísticas
-│
-├── util/
-│   ├── InputUtil.java          # Leitura segura de entrada do console
-│   └── ConsolePrinter.java     # Formatação visual do console
-│
-└── Main.java                   # Ponto de entrada + dados de demonstração
-```
+A base lógica em Java implementa as regras operacionais sob os quatro pilares fundamentais da POO:
+
+*   **Abstração**: Contrato geral implementado pela classe abstrata `ObjetoEspacial` e pela interface `Coletavel`.
+*   **Herança**: `Detrito` (herda de `ObjetoEspacial` e implementa `Coletavel`), `SpaceTruck` e `EstacaoBase` estendem a classe base.
+*   **Encapsulamento**: Atributos privados protegidos com validações específicas de acesso público via *Getters e Setters*.
+*   **Polimorfismo**: Execuções dinâmicas como o método `exibir()` que assume comportamentos distintos para cada classe filha nas listagens de relatórios.
+
+### Algoritmo de Rota Orbital (Nearest Neighbor)
+O `RotaService` implementa a heurística do **Vizinho Mais Próximo** para traçar a ordem ideal de coleta, minimizando o Delta-V (gasto de propulsão). **A altitude tem peso dobrado nas equações**, pois a mudança de eixos orbitais (subir ou descer altitudes) consome significativamente mais propelente RCS do que correções planares.
 
 ---
 
-## 🛠️ Como Compilar e Executar
+## 💻 Protótipo Web (React Front-End)
 
-### Pré-requisitos
-- Java JDK 11 ou superior
-- CMD ou Terminal
+A interface web simula uma sala de controle espacial futurista baseada em micro-animações, sombras de neon ciano/magenta e recursos de interatividade:
 
-### Compilar
-```cmd
-cd "caminho/para/java"
-javac -encoding UTF-8 -d out -sourcepath src src\br\com\spacewaste\Main.java
-```
+### 1. Painel de Lançamento (Home)
+*   **Apresentação HUD**: Efeito de brilho de néon e wireframes estilizados.
+*   **Animação Orbital**: Órbitas 2D interativas geradas puramente via animações CSS `keyframes`, demonstrando o comportamento orbital da frota e do lixo ao redor da Terra.
+*   **Ficha do Problema**: Análises visuais explicativas sobre a **Síndrome de Kessler** e os vetores logísticos de mitigação.
 
-### Executar
-```cmd
-java -cp out br.com.spacewaste.Main
-```
+### 2. Globo Terrestre e Mapa Orbital 3D
+*   **Globo 3D Interativo**: A Terra é simulada como uma esfera tridimensional em rotação contínua desenhada no **HTML5 Canvas**. Uma grade de pontos geográficos calcula em 3D as posições dos continentes usando projeção ortográfica.
+*   **Oclusão Orbital**: Satélites e naves orbitam em 3D. Quando se deslocam para trás do planeta (face oculta $Z < 0$), o sistema atenua a opacidade para $20\%$ de forma realista.
+*   **Mira HUD de Telemetria**:
+    *   **Halos Pulsantes**: Círculos pulsantes avisam o usuário de forma clara que as naves, bases e detritos em órbita são clicáveis.
+    *   **Mira HUD**: Ao passar o cursor (que se transforma em `pointer`), brackets de mira HUD militar travam no alvo detectado.
+    *   **Hitbox de 15px**: Margem de clique ampliada para facilitar a captura de detritos móveis de alta velocidade.
+*   **Lista de Busca Lateral**: Permite filtrar e buscar detritos diretamente em um painel HUD lateral. Clicar em um item da lista foca a mira e a telemetria nele de forma instantânea.
+*   **Simulador de Voo**: Selecione um Space Truck, calcule a rota mais curta passando pelos alvos da órbita selecionada, e visualize o trajeto traçado no globo. O botão **Enviar Coleta** efetua a interceptação e transfere a massa dos detritos para a nave na simulação local.
 
-### Compilar e executar de uma vez
-```cmd
-javac -encoding UTF-8 -d out -sourcepath src src\br\com\spacewaste\Main.java && java -cp out br.com.spacewaste.Main
-```
-
----
-
-## 🌍 Dados de Demonstração
-
-O sistema já inicializa com dados reais ao executar:
-
-| Tipo | Exemplos carregados |
-|---|---|
-| Detritos | Cosmos 1408, Fengyun-1C, Iridium 33, Delta II, SNAP-10A, BREEZE-M, Vanguard 1 |
-| Space Trucks | SW-Alpha, SW-Beta, SW-Gamma (operacionais) · SW-Delta (manutenção) |
-| Estações | Base Orbital Alpha (LEO), Base de Reentrada BR-1 (Terra), Centro GEO-1 |
+### 3. Painel Operacional (Dashboard)
+*   **Métricas Dinâmicas**: Contadores automáticos de detritos ativos no cinto de colisão, lixo recolhido e total de massa espacial incinerada ou reciclada ($kg$).
+*   **Módulo Estabilidade e Carga (Grid 4x4)**:
+    *   Representação física dos 16 compartimentos da baia de carga dos Space Trucks.
+    *   Cálculo em tempo real do **Centro de Massa (CoM)** com base nas posições e pesos das toneladas de lixo armazenado.
+    *   **Indicador de Voo**: Alertas dinâmicos de estabilidade giroscópica (*Estável* em verde, *Advertência* em amarelo, *Crítico* piscando em vermelho devido a torque de desvio).
+    *   **Auto-Balanceamento Heurístico**: Um algoritmo que reorganiza as cargas de forma simétrica a partir do centro da nave, estabilizando e realinhando o Centro de Massa automaticamente.
+    *   Permite adicionar ou remover massas arbitrariamente clicando nas células do grid.
+*   **Gráficos Customizados SVG**: Análise de risco de densidade orbital gerada nativamente em SVG com gradientes e áreas sombreadas neon, sem arrastar dependências pesadas.
+*   **Chatbot A.R.I.A.**: Assistente operacional dotada de inteligência artificial de bordo com base em processamento de palavras-chave, fornecendo telemetria da frota, explicações da Síndrome de Kessler e instruções gerais.
 
 ---
 
-## 🗺️ Algoritmo de Rota Orbital
+## 🚀 Como Executar as Aplicações
 
-O **RotaService** implementa o algoritmo do **Vizinho Mais Próximo (Nearest Neighbor)**
-para otimizar a sequência de coleta e minimizar o delta-V total da missão:
+### Executando o Motor Java (CLI)
+1. Certifique-se de possuir o Java JDK 11 ou superior instalado.
+2. Acesse a pasta do projeto java:
+   ```cmd
+   cd java
+   ```
+3. Compile e execute o ponto de entrada:
+   ```cmd
+   javac -encoding UTF-8 -d out -sourcepath src src\br\com\spacewaste\Main.java && java -cp out br.com.spacewaste.Main
+   ```
 
-1. Inicia pelo detrito de **menor altitude** (mais barato de atingir)
-2. A cada passo, vai ao detrito **mais próximo não visitado**
-3. A distância orbital considera altitude com **peso dobrado** (mudanças de altitude custam mais combustível que variações de longitude/inclinação)
+### Executando a Interface Web (React)
+1. Certifique-se de possuir o Node.js instalado (v16+ recomendado).
+2. Acesse o diretório da web:
+   ```cmd
+   cd web
+   ```
+3. Instale as dependências:
+   ```cmd
+   npm install
+   ```
+4. Inicie o servidor local de desenvolvimento (Vite):
+   ```cmd
+   npm run dev
+   ```
+5. Abra a URL fornecida pelo Vite no navegador (geralmente `http://localhost:5173/`).
 
 ---
 
 ## 🎓 Informações Acadêmicas
 
-| | |
+| Campo | Descrição |
 |---|---|
 | **Instituição** | FIAP |
 | **Curso** | Engenharia de Software |
 | **Semestre** | 2º Ano — Turma Fevereiro |
-| **Entrega** | Global Solution 2026/1 |
-| **Tema** | Economia Espacial |
-
----
-
-## 📦 Entregas do Projeto
-
-- [x] Sistema Java com POO (console)
-- [x] Diagrama de Classes UML (`uml/SpaceWaste_ClassDiagram.puml`)
-- [X] Banco de Dados (script SQL + Diagrama ER)
-- [ ] Protótipo Web (HTML + CSS + JS)
-- [ ] Vídeo Pitch (3 minutos)
+| **Entrega** | Global Solution 2026/1 — Economia Espacial |
+| **Equipe / Assinatura** | **Code Crew 2026** |
