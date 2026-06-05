@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import OrbitalMap from "./components/OrbitalMap";
 import Dashboard from "./components/Dashboard";
 import SpaceFleetManager from "./components/SpaceFleetManager";
+import WelcomeGuide, { resetGuide } from "./components/WelcomeGuide";
 
 import { initialDebris, initialSpaceTrucks } from "./services/orbitalService";
 
@@ -13,9 +14,17 @@ function App() {
   const [currentPage, setCurrentPage] = useState("home");
   const [debrisList, setDebrisList] = useState(initialDebris);
   const [spaceTrucks, setSpaceTrucks] = useState(initialSpaceTrucks);
+  const [guideKey, setGuideKey] = useState(0);
+
+  const handleReopenGuide = () => {
+    resetGuide();
+    setGuideKey((k) => k + 1);
+  };
 
   return (
     <>
+      <WelcomeGuide key={guideKey} />
+
       {/* HUD Navigation */}
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
@@ -70,7 +79,31 @@ function App() {
             NOMINAL (LEO/GEO ACTIVE)
           </span>
         </div>
-        <div>FIAP &copy; 2026 | Global Solution — Code Crew 2026</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          FIAP &copy; 2026 | Global Solution — Code Crew 2026
+          <button
+            onClick={handleReopenGuide}
+            title="Abrir guia de uso"
+            style={{
+              background: "none",
+              border: "1px solid rgba(0,240,255,0.25)",
+              color: "rgba(0,240,255,0.6)",
+              borderRadius: "50%",
+              width: "20px",
+              height: "20px",
+              cursor: "pointer",
+              fontSize: "11px",
+              fontWeight: "700",
+              lineHeight: 1,
+              padding: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ?
+          </button>
+        </div>
         <div>CÓDIGO OPERACIONAL: SW-V2.6.4</div>
       </footer>
     </>

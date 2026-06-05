@@ -83,6 +83,83 @@ export default function Home({ setCurrentPage }) {
         </div>
       </section>
 
+      {/* ── Seção ODS da ONU ─────────────────────────────────────────────── */}
+      <section className="hud-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div className="corner-hud corner-top-left"></div>
+        <div className="corner-hud corner-top-right"></div>
+        <div>
+          <h3 style={{ color: '#fff', marginBottom: '6px' }}>Objetivos de Desenvolvimento Sustentável — ONU</h3>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>
+            O SpaceWaste está alinhado com a Agenda 2030 da ONU. A limpeza orbital protege infraestrutura global,
+            promove economia circular no espaço e garante que as próximas gerações possam usar as órbitas terrestres.
+          </p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+          {[
+            {
+              num: '9',
+              color: '#f36d25',
+              title: 'Indústria, Inovação e Infraestrutura',
+              text: 'Space Trucks e algoritmos de rota orbital representam inovação de ponta em infraestrutura espacial sustentável.',
+            },
+            {
+              num: '12',
+              color: '#bf8b2e',
+              title: 'Consumo e Produção Responsáveis',
+              text: 'Detritos coletados são reaproveitados ou carbonizados de forma controlada — economia circular aplicada ao espaço.',
+            },
+            {
+              num: '13',
+              color: '#3f7e44',
+              title: 'Ação Contra a Mudança Global do Clima',
+              text: 'Reaproveitar material orbital reduz a necessidade de novos lançamentos, diminuindo a emissão de gases durante o processo de produção.',
+            },
+            {
+              num: '17',
+              color: '#19486a',
+              title: 'Parcerias e Meios de Implementação',
+              text: 'Integração com dados da ESA e NASA exemplifica a cooperação internacional necessária para a governança do espaço.',
+            },
+          ].map(({ num, color, title, text }) => (
+            <div
+              key={num}
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: `1px solid ${color}55`,
+                borderLeft: `4px solid ${color}`,
+                borderRadius: '6px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span
+                  style={{
+                    background: color,
+                    color: '#fff',
+                    fontWeight: '800',
+                    fontSize: '15px',
+                    borderRadius: '6px',
+                    width: '36px',
+                    height: '36px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  {num}
+                </span>
+                <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600', lineHeight: '1.3' }}>{title}</span>
+              </div>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '12px', lineHeight: '1.5', margin: 0 }}>{text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="hud-card" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         <div className="corner-hud corner-top-left"></div>
         <div className="corner-hud corner-top-right"></div>
@@ -97,13 +174,13 @@ export default function Home({ setCurrentPage }) {
           <div>
             <h4 style={{ color: 'var(--color-cyan)', marginBottom: '5px' }}>2. Planejamento de Rotas</h4>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>
-              Selecionamos a nave coletora (Space Truck) e enviamos a lista de alvos. Nosso motor gera a ordem otimizada que reduz os custos de delta-V.
+              Selecionamos o Space Truck coletor e enviamos a lista de alvos. Nosso motor gera a ordem otimizada que reduz os custos de delta-V.
             </p>
           </div>
           <div>
             <h4 style={{ color: 'var(--color-cyan)', marginBottom: '5px' }}>3. Logística e Processamento</h4>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>
-              A nave armazena o lixo de forma balanceada. Detritos leves vão para a Estação Orbital para reciclagem, pesados são desintegrados na atmosfera.
+              O Space Truck armazena o lixo de forma balanceada. Detritos leves vão para a Estação Orbital para reciclagem, pesados são desintegrados na atmosfera.
             </p>
           </div>
         </div>
