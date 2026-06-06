@@ -31,9 +31,10 @@ spacewaste/
 │
 ├── web/                       # Interface Front-End (React + Vite)
 │   ├── src/
-│   │   ├── components/        # Componentes reutilizáveis (Map, Dashboard, etc.)
+│   │   ├── components/        # Componentes (Map, Dashboard, Login, Cadastros, etc.)
 │   │   ├── services/          # Mock de dados NASA/ESA e algoritmos JS
-│   │   ├── App.jsx            # Roteador simples e gerenciamento de estado
+│   │   ├── styles/            # Folhas de estilo modularizadas (Login, Cadastros, Frota)
+│   │   ├── App.jsx            # Roteador simples, gerenciamento de estado e controle de acesso
 │   │   ├── index.css          # Design System HUD Espacial e Dark Mode
 │   │   └── App.css            # Estilos, animações e retículos HUD específicos
 │   ├── index.html             # Estrutura base HTML5 com tags SEO
@@ -87,6 +88,11 @@ A interface web simula uma sala de controle espacial futurista baseada em micro-
     *   Permite adicionar ou remover massas arbitrariamente clicando nas células do grid.
 *   **Gráficos Customizados SVG**: Análise de risco de densidade orbital gerada nativamente em SVG com gradientes e áreas sombreadas neon, sem arrastar dependências pesadas.
 *   **Chatbot A.R.I.A.**: Assistente operacional dotada de inteligência artificial de bordo com base em processamento de palavras-chave, fornecendo telemetria da frota, explicações da Síndrome de Kessler e instruções gerais.
+
+### 4. Controle de Acesso e Cadastros (Novo)
+*   **Autenticação HUD Futurista**: Painel de login holográfico com simulação interativa de **Scanner Biométrico** (leitor de digital com linha de escaneamento a laser ciano/verde). Integração de credenciais ativas e novos cadastros sincronizados via `localStorage`.
+*   **Recrutamento de Astronautas**: Tela completa para recrutamento de tripulação orbital, com campos de Nome, Cargo (Piloto, Engenheiro, etc.), Experiência Espacial e Senha de Acesso. Permite alocar imediatamente o astronauta a um Space Truck da frota ou mantê-lo em reserva.
+*   **Estaleiro de Manufatura de Naves**: Módulo avançado para registro de novos Space Trucks. Permite definir serial ID, nome, tipo de chassi (Carga, Passageiros, Coleta, etc.), capacidade de peso e nível inicial de combustível. O envio do formulário dispara um processo simulado de manufatura 3D no hangar orbital e exibe a planta baixa (blueprint) da nave desenhada em SVG.
 
 ---
 

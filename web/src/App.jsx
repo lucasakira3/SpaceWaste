@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import OrbitalMap from "./components/OrbitalMap";
 import Dashboard from "./components/Dashboard";
 import SpaceFleetManager from "./components/SpaceFleetManager";
 import WelcomeGuide, { resetGuide } from "./components/WelcomeGuide";
+import Login from "./components/Login";
+import CadastroAstronauta from "./components/CadastroAstronauta";
+import CadastroNave from "./components/CadastroNave";
 
 import { initialDebris, initialSpaceTrucks } from "./services/orbitalService";
 
 import "./App.css";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem("spacewaste_isLoggedIn") === "true";
+  });
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    const user = localStorage.getItem("spacewaste_currentUser");
+    return user ? JSON.parse(user) : null;
+  });
+
   const [currentPage, setCurrentPage] = useState("home");
+
   const [debrisList, setDebrisList] = useState(initialDebris);
   const [spaceTrucks, setSpaceTrucks] = useState(initialSpaceTrucks);
   const [guideKey, setGuideKey] = useState(0);
@@ -21,18 +34,49 @@ function App() {
     setGuideKey((k) => k + 1);
   };
 
+  const handleLoginSuccess = (user) => {
+    setIsLoggedIn(true);
+    setCurrentUser(user);
+    setCurrentPage("home");
+    localStorage.setItem("spacewaste_isLoggedIn", "true");
+    localStorage.setItem("spacewaste_currentUser", JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+    setCurrentPage("home");
+    localStorage.removeItem("spacewaste_isLoggedIn");
+    localStorage.removeItem("spacewaste_currentUser");
+  };
+
+  // Impedir acesso não autorizado a rotas privadas se deslogado
+  useEffect(() => {
+    const publicPages = ["home", "login", "cadastrar-astronauta-public"];
+    if (!isLoggedIn && !publicPages.includes(currentPage)) {
+      setCurrentPage("home");
+    }
+  }, [isLoggedIn, currentPage]);
+
   return (
     <>
-      <WelcomeGuide key={guideKey} />
+      {isLoggedIn && <WelcomeGuide key={guideKey} />}
 
       {/* HUD Navigation */}
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Navbar
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
+      />
 
       {/* Roteador Simples Baseado em Estado */}
       <main style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        {currentPage === "home" && <Home setCurrentPage={setCurrentPage} />}
+        {currentPage === "home" && (
+          <Home setCurrentPage={setCurrentPage} isLoggedIn={isLoggedIn} />
+        )}
 
-        {currentPage === "map" && (
+        {isLoggedIn && currentPage === "map" && (
           <OrbitalMap
             debrisList={debrisList}
             setDebrisList={setDebrisList}
@@ -41,7 +85,7 @@ function App() {
           />
         )}
 
-        {currentPage === "dashboard" && (
+        {isLoggedIn && currentPage === "dashboard" && (
           <Dashboard
             debrisList={debrisList}
             setDebrisList={setDebrisList}
@@ -50,10 +94,42 @@ function App() {
           />
         )}
 
-        {currentPage === "fleet" && (
+        {isLoggedIn && currentPage === "fleet" && (
           <SpaceFleetManager
             spaceTrucks={spaceTrucks}
             setSpaceTrucks={setSpaceTrucks}
+          />
+        )}
+
+        {isLoggedIn && currentPage === "cadastrar-astronauta" && (
+          <CadastroAstronauta
+            spaceTrucks={spaceTrucks}
+            setSpaceTrucks={setSpaceTrucks}
+            isPublic={false}
+          />
+        )}
+
+        {isLoggedIn && currentPage === "cadastrar-nave" && (
+          <CadastroNave
+            spaceTrucks={spaceTrucks}
+            setSpaceTrucks={setSpaceTrucks}
+            onBack={() => setCurrentPage("fleet")}
+          />
+        )}
+
+        {!isLoggedIn && currentPage === "login" && (
+          <Login
+            onLoginSuccess={handleLoginSuccess}
+            onGoToSignUp={() => setCurrentPage("cadastrar-astronauta-public")}
+          />
+        )}
+
+        {!isLoggedIn && currentPage === "cadastrar-astronauta-public" && (
+          <CadastroAstronauta
+            spaceTrucks={spaceTrucks}
+            setSpaceTrucks={setSpaceTrucks}
+            isPublic={true}
+            onBack={() => setCurrentPage("login")}
           />
         )}
       </main>
@@ -78,6 +154,11 @@ function App() {
           <span style={{ color: "var(--color-green)", fontWeight: "bold" }}>
             NOMINAL (LEO/GEO ACTIVE)
           </span>
+          {currentUser && (
+            <span style={{ marginLeft: "15px", color: "var(--color-cyan)", fontWeight: "bold" }}>
+              | OPERADOR ATIVO: {currentUser.nome.toUpperCase()} ({currentUser.credentialId})
+            </span>
+          )}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           FIAP &copy; 2026 | Global Solution — Code Crew 2026
@@ -111,3 +192,5 @@ function App() {
 }
 
 export default App;
+
+

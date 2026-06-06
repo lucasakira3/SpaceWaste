@@ -1,0 +1,291 @@
+/* Login.css - Estilo para a Tela de Login Futurista */
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(5, 8, 22, 0.85);
+  border: var(--border-hud);
+  border-radius: 8px;
+  padding: 35px 30px;
+  backdrop-filter: var(--glass-blur);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 240, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.3s ease;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-cyan) 0%, var(--color-magenta) 100%);
+  box-shadow: 0 0 10px var(--color-cyan-glow);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.login-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.login-logo-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--color-cyan);
+  filter: drop-shadow(0 0 6px var(--color-cyan-glow));
+  animation: logoPulse 2s infinite ease-in-out;
+}
+
+.login-title {
+  font-size: 26px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #fff 40%, var(--color-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.login-subtitle {
+  font-family: var(--font-hud);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+/* Biometric Scanner Simulation Area */
+.biometric-scanner-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 6px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scanner-box {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed rgba(0, 240, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(0, 240, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.scanner-box:hover {
+  border-color: var(--color-cyan);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+}
+
+.scanner-box.scanning {
+  border-color: var(--color-green);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+}
+
+.scanner-icon {
+  width: 50px;
+  height: 50px;
+  color: var(--color-cyan);
+  transition: all 0.3s;
+}
+
+.scanner-box.scanning .scanner-icon {
+  color: var(--color-green);
+  filter: drop-shadow(0 0 8px var(--color-green-glow));
+}
+
+/* Laser sweep line */
+.laser-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-cyan);
+  box-shadow: 0 0 10px var(--color-cyan), 0 0 5px var(--color-cyan);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scanner-box.scanning .laser-line {
+  opacity: 1;
+  animation: scanSweep 1.5s infinite ease-in-out;
+  background: var(--color-green);
+  box-shadow: 0 0 10px var(--color-green), 0 0 5px var(--color-green);
+}
+
+@keyframes scanSweep {
+  0% { top: 10%; }
+  50% { top: 90%; }
+  100% { top: 10%; }
+}
+
+.scan-status-text {
+  font-family: var(--font-hud);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+  min-height: 16px;
+}
+
+.scan-status-text.scanning {
+  color: var(--color-yellow);
+  animation: blinkText 1s infinite alternate;
+}
+
+.scan-status-text.success {
+  color: var(--color-green);
+  text-shadow: 0 0 5px var(--color-green-glow);
+}
+
+.scan-status-text.failed {
+  color: var(--color-magenta);
+  text-shadow: 0 0 5px var(--color-magenta-glow);
+}
+
+@keyframes blinkText {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Futuristic Access Form styling */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-family: var(--font-hud);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon svg {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  color: rgba(0, 240, 255, 0.4);
+  pointer-events: none;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 12px 12px 12px 38px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  color: #fff;
+  border-radius: 4px;
+  font-family: var(--font-text);
+  font-size: 13.5px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.input-with-icon input:focus {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2), inset 0 0 5px rgba(0, 240, 255, 0.1);
+  background: rgba(0, 240, 255, 0.02);
+}
+
+.alert-message {
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  text-align: center;
+  border-left: 3px solid;
+  font-family: var(--font-hud);
+  text-transform: uppercase;
+  animation: shakeAlert 0.3s ease;
+}
+
+.alert-message.danger {
+  background: rgba(255, 0, 85, 0.07);
+  border-color: var(--color-magenta);
+  color: var(--color-magenta);
+}
+
+.alert-message.success {
+  background: rgba(0, 255, 102, 0.07);
+  border-color: var(--color-green);
+  color: var(--color-green);
+}
+
+@keyframes shakeAlert {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.register-redirect {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.register-link {
+  color: var(--color-cyan);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.register-link:hover {
+  color: #fff;
+  text-shadow: 0 0 8px var(--color-cyan);
+}

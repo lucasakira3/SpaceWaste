@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Navbar({ currentPage, setCurrentPage }) {
+export default function Navbar({ currentPage, setCurrentPage, isLoggedIn, onLogout }) {
   return (
     <nav className="navbar">
       <div
@@ -25,6 +25,7 @@ export default function Navbar({ currentPage, setCurrentPage }) {
         </svg>
         <span className="logo-text">SpaceWaste</span>
       </div>
+      
       <div className="nav-links">
         <button
           className={`nav-link ${currentPage === "home" ? "active" : ""}`}
@@ -32,25 +33,68 @@ export default function Navbar({ currentPage, setCurrentPage }) {
         >
           Painel de Lançamento (Home)
         </button>
-        <button
-          className={`nav-link ${currentPage === "map" ? "active" : ""}`}
-          onClick={() => setCurrentPage("map")}
-        >
-          Mapa de Rotas
-        </button>
-        <button
-          className={`nav-link ${currentPage === "dashboard" ? "active" : ""}`}
-          onClick={() => setCurrentPage("dashboard")}
-        >
-          Painel Operacional
-        </button>
-        <button
-          className={`nav-link ${currentPage === "fleet" ? "active" : ""}`}
-          onClick={() => setCurrentPage("fleet")}
-        >
-          Gerenciar Frota
-        </button>
+
+        {isLoggedIn ? (
+          <>
+            <button
+              className={`nav-link ${currentPage === "map" ? "active" : ""}`}
+              onClick={() => setCurrentPage("map")}
+            >
+              Mapa de Rotas
+            </button>
+            <button
+              className={`nav-link ${currentPage === "dashboard" ? "active" : ""}`}
+              onClick={() => setCurrentPage("dashboard")}
+            >
+              Painel Operacional
+            </button>
+            <button
+              className={`nav-link ${currentPage === "fleet" ? "active" : ""}`}
+              onClick={() => setCurrentPage("fleet")}
+            >
+              Gerenciar Frota
+            </button>
+            <button
+              className={`nav-link ${currentPage === "cadastrar-astronauta" ? "active" : ""}`}
+              onClick={() => setCurrentPage("cadastrar-astronauta")}
+            >
+              Cadastrar Astronauta
+            </button>
+            <button
+              className={`nav-link ${currentPage === "cadastrar-nave" ? "active" : ""}`}
+              onClick={() => setCurrentPage("cadastrar-nave")}
+            >
+              Cadastrar Nave
+            </button>
+            <button
+              className="nav-link"
+              onClick={onLogout}
+              style={{
+                color: "var(--color-magenta)",
+                borderColor: "rgba(255, 0, 85, 0.2)",
+                background: "rgba(255, 0, 85, 0.02)"
+              }}
+            >
+              Sair
+            </button>
+          </>
+        ) : (
+          <button
+            className={`nav-link ${currentPage === "login" || currentPage === "cadastrar-astronauta-public" ? "active" : ""}`}
+            onClick={() => setCurrentPage("login")}
+            style={{
+              color: "var(--color-cyan)",
+              borderColor: "rgba(0, 240, 255, 0.3)",
+              background: "rgba(0, 240, 255, 0.05)",
+              textShadow: "0 0 5px var(--color-cyan-glow)"
+            }}
+          >
+            Entrar (Login)
+          </button>
+        )}
       </div>
     </nav>
   );
 }
+
+
